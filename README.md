@@ -1,4 +1,5 @@
 🌍 Aurevia
+
 Gerçek zamanlı API verileriyle çalışan, otel arama ve detay görüntüleme odaklı bir seyahat platformudur. ASP.NET Core MVC mimarisi üzerine inşa edilmiştir.
 
 📋 Proje Hakkında
@@ -8,6 +9,7 @@ Uygulama, veriyi doğrudan üretmek yerine RapidAPI üzerinden sunulan harici RE
 Tüm API entegrasyonları, tek bir RapidAPI anahtarı üzerinden HttpClient ile yönetilir. Alınan JSON verileri işlenerek servis katmanında yapılandırılır ve MVC / Razor tabanlı kullanıcı arayüzünde sade ve anlaşılır bir şekilde sunulur.
 
 🚀 Özellikler
+
 🏨 Otel Arama — Şehir, tarih, yetişkin/çocuk sayısına göre otel listeleme
 🔍 Otel Detay — Fotoğraf galerisi, olanaklar, check-in/out saatleri, konum haritası
 ⭐ Misafir Yorumları — Booking.com yorumları (puan, artılar, eksiler)
