@@ -12,14 +12,22 @@ Tüm API entegrasyonları, tek bir RapidAPI anahtarı üzerinden HttpClient ile 
 🚀 Özellikler
 
 🏨 Otel Arama — Şehir, tarih, yetişkin/çocuk sayısına göre otel listeleme
+
 🔍 Otel Detay — Fotoğraf galerisi, olanaklar, check-in/out saatleri, konum haritası
+
 ⭐ Misafir Yorumları — Booking.com yorumları (puan, artılar, eksiler)
+
 🌤️ Hava Durumu — Anlık hava durumu bilgisi
+
 💱 Döviz Kurları — Gerçek zamanlı USD bazlı TRY karşılıkları
+
 📈 Kripto Para — Anlık kripto fiyatları (BTC, ETH, vb.)
+
 ⛽ Akaryakıt Fiyatları — Türkiye güncel yakıt fiyatları
 
+
 Projeye Ait Görseller : 
+
 ![image_Alt](https://github.com/iremkosar/Aurevia/blob/9716fb65e404f9720c81f2c3e351e4d998414416/Project6RapidApi/wwwroot/1.jpg)
 
 ![image_Alt](https://github.com/iremkosar/Aurevia/blob/9716fb65e404f9720c81f2c3e351e4d998414416/Project6RapidApi/wwwroot/2.jpg)
