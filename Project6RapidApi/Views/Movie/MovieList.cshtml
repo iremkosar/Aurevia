@@ -1,0 +1,41 @@
+﻿@model List<ImdbMovieDto>
+
+@{
+    Layout = null;
+}
+
+<h2 style="margin-bottom:20px;">🎬 IMDB Top 100 Filmler</h2>
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Poster</th>
+            <th>Film Adı</th>
+            <th>IMDB Puanı</th>
+            <th>Detay</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:120px;">
+                    <img src="@item.image" style="width:100px;height:auto;border-radius:6px;" />
+                </td>
+                <td style="vertical-align:middle;">
+                    <strong>@item.title</strong>
+                </td>
+                <td style="vertical-align:middle;">
+                    ⭐ @item.rating
+                </td>
+                <td style="vertical-align:middle;">
+                    <a href="@item.imdb_link" target="_blank" class="btn btn-primary btn-sm">
+                        IMDB Git
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

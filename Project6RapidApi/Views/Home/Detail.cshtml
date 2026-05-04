@@ -1,0 +1,792 @@
+﻿@model Project6RapidApi.ViewModels.StayDetailVm
+@{
+    Layout = null;
+    var nights = (Model.Checkout - Model.Checkin).Days;
+    var totalPrice = Model.PricePerNight * nights;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.Name — Aurevia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <style>
+        /* ASİMETRİK GALERİ */
+        .gallery-asymmetric {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 240px 190px;
+            gap: 6px;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 44px;
+        }
+
+        .g-main {
+            grid-column: 1;
+            grid-row: 1 / 3;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .g-right-top {
+            grid-column: 2;
+            grid-row: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .g-wide {
+            grid-column: 2;
+            grid-row: 2;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .g-sub {
+            overflow: hidden;
+            position: relative;
+        }
+
+            .g-main img,
+            .g-sub img,
+            .g-wide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.55s ease;
+            }
+
+            .g-main:hover img,
+            .g-sub:hover img,
+            .g-wide:hover img {
+                transform: scale(1.07);
+            }
+
+        .g-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--card2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text3);
+        }
+
+        .g-more-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(10,12,20,0.82);
+            border: 1px solid rgba(200,169,110,0.3);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 0.72rem;
+            color: var(--gold);
+        }
+
+        /* DETAIL LAYOUT */
+        .detail-page-wrap {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: calc(var(--nav-h) + 32px) 44px 80px;
+        }
+
+        .detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .detail-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .detail-stars {
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .detail-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--text2);
+            margin-bottom: 16px;
+        }
+
+            .detail-location svg {
+                color: var(--gold);
+            }
+
+        .detail-stay-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stay-chip {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.76rem;
+            color: var(--text2);
+        }
+
+        .features-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .feature-chip {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 0.76rem;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-section {
+            margin-bottom: 28px;
+        }
+
+        .detail-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .detail-desc {
+            font-size: 0.86rem;
+            color: var(--text2);
+            line-height: 1.85;
+        }
+
+        .facilities-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 24px;
+        }
+
+            .facilities-list li {
+                font-size: 0.83rem;
+                color: var(--text2);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 4px 0;
+            }
+
+                .facilities-list li::before {
+                    content: '';
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    background: var(--gold);
+                    flex-shrink: 0;
+                }
+
+        .policies-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .policy-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .policy-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 4px;
+        }
+
+        .policy-val {
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* BOOKING SIDEBAR */
+        .booking-sidebar {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 28px;
+            position: sticky;
+            top: calc(var(--nav-h) + 16px);
+        }
+
+        .bs-price-line {
+            display: flex;
+            align-items: baseline;
+            gap: 7px;
+            margin-bottom: 5px;
+        }
+
+        .bs-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 400;
+            color: var(--text);
+        }
+
+        .bs-per {
+            font-size: 0.8rem;
+            color: var(--text3);
+        }
+
+        .bs-meta {
+            font-size: 0.75rem;
+            color: var(--text3);
+            margin-bottom: 20px;
+        }
+
+        .bs-date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .bs-date {
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.03);
+        }
+
+            .bs-date:first-child {
+                border-right: 1px solid rgba(255,255,255,0.08);
+            }
+
+        .bs-date-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 4px;
+        }
+
+        .bs-date-val {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .bs-guests {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 18px;
+        }
+
+        .bs-total {
+            background: rgba(200,169,110,0.08);
+            border: 1px solid rgba(200,169,110,0.2);
+            border-radius: 10px;
+            padding: 14px 15px;
+            margin-bottom: 16px;
+        }
+
+        .bs-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text2);
+            margin-bottom: 6px;
+        }
+
+            .bs-total-row.final {
+                border-top: 1px solid rgba(255,255,255,0.08);
+                padding-top: 10px;
+                margin-top: 4px;
+                font-size: 0.9rem;
+                color: var(--text);
+                font-weight: 500;
+            }
+
+                .bs-total-row.final span:last-child {
+                    color: var(--gold);
+                }
+
+        .bs-book-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #a8822a, #c8a96e, #d4b57a, #c0a056);
+            background-size: 200%;
+            color: #0a0c14;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+            .bs-book-btn:hover {
+                background-position: 100%;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 32px rgba(200,169,110,0.35);
+            }
+
+        .bs-note {
+            font-size: 0.66rem;
+            color: var(--text3);
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .bs-trust {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            padding-top: 14px;
+        }
+
+        .bs-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.74rem;
+            color: var(--text3);
+            margin-bottom: 7px;
+        }
+
+            .bs-trust-item::before {
+                content: '✓';
+                color: #4caf78;
+                font-size: 0.7rem;
+            }
+
+        @@media(max-width: 1000px) {
+            .detail-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-sidebar {
+                position: static;
+            }
+
+            .gallery-asymmetric {
+                grid-template-columns: 1fr;
+                grid-template-rows: 240px 140px 140px 160px;
+            }
+
+            .g-main {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .g-right-top {
+                grid-column: 1;
+                grid-row: 2 / 4;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .g-wide {
+                grid-column: 1;
+                grid-row: 4;
+            }
+        }
+
+        @@media(max-width: 600px) {
+            .detail-page-wrap {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .facilities-list {
+                grid-template-columns: 1fr;
+            }
+
+            .policies-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="nav scrolled" id="nav">
+        <div class="nav-wrap">
+            <a href="/" class="brand">
+                <svg class="brand-mark" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M12 2 L15.5 8.5 L23 9.5 L17.5 15 L19 22 L12 18.5 L5 22 L6.5 15 L1 9.5 L8.5 8.5 Z" fill="none" stroke="#c8a96e" stroke-width="1.4" />
+                    <circle cx="12" cy="12" r="3" fill="#c8a96e" opacity="0.7" />
+                </svg>
+                <span class="brand-name">Aurevia</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Stays</a></li>
+                <li><a href="#">Experiences</a></li>
+                <li><a href="#">Members</a></li>
+            </ul>
+            <div class="nav-end">
+                <a href="javascript:history.back()" class="back-link">← Back to results</a>
+                <a href="#" class="nav-cta">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="detail-page-wrap">
+
+        <!-- ASİMETRİK GALERİ -->
+        <div class="gallery-asymmetric">
+
+            <!-- SOL: BÜYÜK GÖRSEL -->
+            <div class="g-main">
+                @if (Model.GalleryUrls.Count > 0)
+                {
+                    <img src="@Model.GalleryUrls[0]" alt="@Model.Name" />
+                }
+                else
+                {
+                    <div class="g-placeholder">🏨</div>
+                }
+            </div>
+
+            <!-- SAĞ ÜST: 2 KÜÇÜK GÖRSEL -->
+            <div class="g-right-top">
+                <div class="g-sub">
+                    @if (Model.GalleryUrls.Count > 1)
+                    {
+                        <img src="@Model.GalleryUrls[1]" alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <div class="g-placeholder">🏨</div>
+                    }
+                </div>
+                <div class="g-sub">
+                    @if (Model.GalleryUrls.Count > 2)
+                    {
+                        <img src="@Model.GalleryUrls[2]" alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <div class="g-placeholder">🏨</div>
+                    }
+                </div>
+            </div>
+
+            <!-- SAĞ ALT: GENİŞ GÖRSEL -->
+            <div class="g-wide">
+                @if (Model.GalleryUrls.Count > 3)
+                {
+                    <img src="@Model.GalleryUrls[3]" alt="@Model.Name" />
+                }
+                else
+                {
+                    <div class="g-placeholder">🏨</div>
+                }
+                @if (Model.GalleryUrls.Count > 4)
+                {
+                    <div class="g-more-badge">+@(Model.GalleryUrls.Count - 4) photos</div>
+                }
+            </div>
+
+        </div>
+
+        <!-- DETAIL LAYOUT -->
+        <div class="detail-layout">
+
+            <!-- SOL: BİLGİLER -->
+            <div class="detail-left">
+
+                <!-- YILDIZ -->
+                <div class="detail-stars">
+                    @for (int i = 0; i < Model.Stars; i++)
+                    {
+                        <span>★</span>
+                    }
+                </div>
+
+                <!-- İSİM -->
+                <h1 class="detail-name">@Model.Name</h1>
+
+                <!-- KONUM -->
+                <div class="detail-location">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    @Model.Address, @Model.City, @Model.Country
+                    <a href="https://www.google.com/maps/search/@Model.Latitude,@Model.Longitude"
+                       target="_blank"
+                       style="color:var(--gold);font-size:0.75rem;margin-left:4px">
+                        View map
+                    </a>
+                </div>
+
+                <!-- STAY META -->
+                <div class="detail-stay-meta">
+                    <span class="stay-chip">@Model.Checkin.ToString("dd MMM yyyy") → @Model.Checkout.ToString("dd MMM yyyy")</span>
+                    <span class="stay-chip">@nights nights</span>
+                    <span class="stay-chip">Check-in: @Model.CheckinTime</span>
+                    <span class="stay-chip">Check-out: @Model.CheckoutTime</span>
+                </div>
+
+                <!-- ÖZELLİKLER -->
+                @if (Model.Highlights.Any())
+                {
+                    <div class="features-row">
+                        @foreach (var highlight in Model.Highlights)
+                        {
+                            <div class="feature-chip">✓ @highlight</div>
+                        }
+                    </div>
+                }
+
+                <!-- AÇIKLAMA -->
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div class="detail-section">
+                        <h2 class="detail-section-title">About this property</h2>
+                        <p class="detail-desc">@Model.Description</p>
+                    </div>
+                }
+
+                <!-- TESİSLER -->
+                @if (Model.Facilities.Any())
+                {
+                    <div class="detail-section">
+                        <h2 class="detail-section-title">Popular Facilities</h2>
+                        <ul class="facilities-list">
+                            @foreach (var facility in Model.Facilities)
+                            {
+                                <li>@facility</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+
+                <!-- POLİTİKALAR -->
+                <div class="detail-section">
+                    <h2 class="detail-section-title">Hotel Policies</h2>
+                    <div class="policies-grid">
+                        <div class="policy-item">
+                            <div class="policy-label">Check-in</div>
+                            <div class="policy-val">@Model.CheckinTime</div>
+                        </div>
+                        <div class="policy-item">
+                            <div class="policy-label">Check-out</div>
+                            <div class="policy-val">@Model.CheckoutTime</div>
+                        </div>
+                        <div class="policy-item">
+                            <div class="policy-label">Reviews</div>
+                            <div class="policy-val">@Model.ReviewCount reviews</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HARİTA -->
+                @if (Model.Latitude != 0 && Model.Longitude != 0)
+                {
+                    <div class="detail-section">
+                        <h2 class="detail-section-title">Location</h2>
+                        <div id="hotelMap" style="height: 350px; border-radius: 12px; overflow: hidden;"></div>
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var lat = @Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            var lon = @Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            var hotelName = @Json.Serialize(Model.Name);
+                            var hotelAddress = @Json.Serialize(Model.Address);
+
+                            var map = L.map('hotelMap').setView([lat, lon], 15);
+
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '© OpenStreetMap contributors'
+                            }).addTo(map);
+
+                            var icon = L.divIcon({
+                                html: '<div style="background:#c8a96e;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.5)"></div>',
+                                iconSize: [20, 20],
+                                iconAnchor: [10, 10],
+                                className: ''
+                            });
+
+                            L.marker([lat, lon], { icon: icon })
+                             .addTo(map)
+                             .bindPopup('<b>' + hotelName + '</b><br>' + hotelAddress)
+                             .openPopup();
+                        });
+                    </script>
+                }
+
+                @if (Model.Reviews.Any())
+                {
+                    <div class="detail-section">
+                        <h2 class="detail-section-title">Guest Reviews</h2>
+                        <div style="display:flex;flex-direction:column;gap:16px;">
+                            @foreach (var review in Model.Reviews.Take(5))
+                            {
+                                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                        <div style="display:flex;align-items:center;gap:10px;">
+                                            <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;color:#0a0c14;font-size:0.85rem;">
+                                                @review.author.name.FirstOrDefault()
+                                            </div>
+                                            <div>
+                                                <div style="font-size:0.84rem;font-weight:500;color:var(--text);">@review.author.name</div>
+                                                <div style="font-size:0.72rem;color:var(--text3);">@review.author.type_string</div>
+                                            </div>
+                                        </div>
+                                        <div style="background:var(--gold);color:#0a0c14;font-weight:700;font-size:0.8rem;padding:4px 10px;border-radius:6px;">
+                                            @review.average_score.ToString("0.0")
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(review.title))
+                                    {
+                                        <div style="font-size:0.88rem;font-weight:500;color:var(--text);margin-bottom:8px;">@review.title</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(review.pros))
+                                    {
+                                        <div style="font-size:0.8rem;color:#4caf78;margin-bottom:4px;">👍 @review.pros</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(review.cons))
+                                    {
+                                        <div style="font-size:0.8rem;color:#e57373;">👎 @review.cons</div>
+                                    }
+                                    <div style="font-size:0.7rem;color:var(--text3);margin-top:8px;">@review.date.Substring(0, 10)</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+             
+
+            </div>
+
+            <!-- SAĞ: REZERVASYON KUTUSU -->
+            <div>
+                <div class="booking-sidebar">
+
+                    <div class="bs-price-line">
+                        <span class="bs-price">@Model.PricePerNight.ToString("0.00") @Model.Currency</span>
+                        <span class="bs-per">/ night</span>
+                    </div>
+                    <div class="bs-meta">
+                        @Model.ReviewCount reviews · @nights nights
+                    </div>
+
+                    <div class="bs-date-grid">
+                        <div class="bs-date">
+                            <div class="bs-date-label">Check-in</div>
+                            <div class="bs-date-val">@Model.Checkin.ToString("dd.MM.yyyy")</div>
+                        </div>
+                        <div class="bs-date">
+                            <div class="bs-date-label">Check-out</div>
+                            <div class="bs-date-val">@Model.Checkout.ToString("dd.MM.yyyy")</div>
+                        </div>
+                    </div>
+
+                    <div class="bs-guests">
+                        <div class="bs-date-label">Guests</div>
+                        <div class="bs-date-val">
+                            @Model.Adults adult(s)
+                            @if (Model.Children > 0)
+                            {
+                                <span>· @Model.Children child(ren)</span>
+                            }
+                            · @Model.Rooms room(s)
+                        </div>
+                    </div>
+
+                    <div class="bs-total">
+                        <div class="bs-total-row">
+                            <span>@nights nights × @Model.PricePerNight.ToString("0.00") @Model.Currency</span>
+                            <span>@totalPrice.ToString("0.00") @Model.Currency</span>
+                        </div>
+                        <div class="bs-total-row final">
+                            <span>Total estimate</span>
+                            <span>@totalPrice.ToString("0.00") @Model.Currency</span>
+                        </div>
+                    </div>
+
+                    <a href="@Model.BookingUrl"
+                       target="_blank"
+                       class="bs-book-btn">
+                        Book Now on Booking.com
+                    </a>
+
+                    <p class="bs-note">Taxes and fees may apply on provider site.</p>
+
+                    <div class="bs-trust">
+                        <div class="bs-trust-item">Best price guaranteed</div>
+                        <div class="bs-trust-item">Free cancellation options available</div>
+                        <div class="bs-trust-item">Secure payment via Booking.com</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-wrap">
+            <div class="footer-brand">
+                <a href="/" class="brand">
+                    <svg class="brand-mark" width="16" height="16" viewBox="0 0 24 24">
+                        <path d="M12 2 L15.5 8.5 L23 9.5 L17.5 15 L19 22 L12 18.5 L5 22 L6.5 15 L1 9.5 L8.5 8.5 Z" fill="none" stroke="#c8a96e" stroke-width="1.4" />
+                        <circle cx="12" cy="12" r="3" fill="#c8a96e" opacity="0.7" />
+                    </svg>
+                    <span class="brand-name">Aurevia</span>
+                </a>
+                <p class="footer-tagline">Curated Luxury Stays, Worldwide.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2025 Aurevia Collection. Powered by Booking.com.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

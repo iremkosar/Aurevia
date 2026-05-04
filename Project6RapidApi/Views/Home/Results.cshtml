@@ -1,0 +1,172 @@
+﻿@model Project6RapidApi.ViewModels.StaySearchResultVm
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.City — Aurevia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="nav scrolled" id="nav">
+        <div class="nav-wrap">
+            <a href="/" class="brand">
+                <svg class="brand-mark" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M12 2 L15.5 8.5 L23 9.5 L17.5 15 L19 22 L12 18.5 L5 22 L6.5 15 L1 9.5 L8.5 8.5 Z" fill="none" stroke="#c8a96e" stroke-width="1.4" />
+                    <circle cx="12" cy="12" r="3" fill="#c8a96e" opacity="0.7" />
+                </svg>
+                <span class="brand-name">Aurevia</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Stays</a></li>
+                <li><a href="#">Experiences</a></li>
+                <li><a href="#">Members</a></li>
+            </ul>
+            <div class="nav-end">
+                <a href="/" class="back-link">← Back</a>
+                <a href="#" class="nav-cta">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- RESULTS -->
+    <section class="results" style="padding-top: calc(var(--nav-h) + 40px)">
+        <div class="results-inner">
+
+            <!-- HEADER -->
+            <div class="results-header">
+                <div>
+                    <h2 class="results-title">
+                        Stays in <em>@Model.City</em>
+                    </h2>
+                    <p class="results-subtitle">
+                        @Model.Checkin.ToString("dd MMM yyyy") — @Model.Checkout.ToString("dd MMM yyyy") ·
+                        @Model.Properties.Count properties ·
+                        @Model.Adults adults
+                        @if (Model.Children > 0)
+                        {
+                            <span>· @Model.Children children</span>
+                        }
+                        · @Model.Rooms room(s)
+                    </p>
+                </div>
+            </div>
+
+            <!-- HOTEL GRID -->
+            @if (!Model.Properties.Any())
+            {
+                <div class="state-panel">
+                    <p class="state-icon">◎</p>
+                    <h3>No results found</h3>
+                    <p>Try different dates or a new destination.</p>
+                    <a href="/" style="color:var(--gold);margin-top:16px;display:inline-block">← Search Again</a>
+                </div>
+            }
+            else
+            {
+                <div class="hotel-grid">
+                    @foreach (var hotel in Model.Properties)
+                    {
+                        <a asp-action="Detail"
+                           asp-controller="Home"
+                           asp-route-hotelId="@hotel.Id"
+                           asp-route-checkin="@Model.Checkin.ToString("yyyy-MM-dd")"
+                           asp-route-checkout="@Model.Checkout.ToString("yyyy-MM-dd")"
+                           asp-route-adults="@Model.Adults"
+                           asp-route-children="@Model.Children"
+                           asp-route-rooms="@Model.Rooms"
+                           class="hotel-card">
+
+                            <div class="hcard-img-wrap">
+                                @if (!string.IsNullOrEmpty(hotel.ImageUrl))
+                                {
+                                    <img src="@hotel.ImageUrl" alt="@hotel.Name" loading="lazy" />
+                                }
+                                else
+                                {
+                                    <div class="hcard-placeholder">🏨</div>
+                                }
+                            </div>
+
+                            <div class="hcard-body">
+                                <!-- YILDIZLAR -->
+                                <div class="hcard-stars">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= hotel.Stars)
+                                        {
+                                            <span class="s-full">★</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="s-empty">★</span>
+                                        }
+                                    }
+                                </div>
+
+                                <!-- İSİM -->
+                                <h3 class="hcard-name">@hotel.Name</h3>
+
+                                <!-- PUAN -->
+                                @if (hotel.ReviewScore > 0)
+                                {
+                                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                                        <span style="background:var(--gold-dim);border:1px solid var(--border2);color:var(--gold);font-size:0.78rem;font-weight:600;padding:2px 8px;border-radius:6px">
+                                            @hotel.ReviewScore.ToString("0.0")
+                                        </span>
+                                        <span style="font-size:0.75rem;color:var(--text2)">
+                                            @hotel.ReviewScoreWord · @hotel.ReviewCount reviews
+                                        </span>
+                                    </div>
+                                }
+
+                                <!-- FİYAT -->
+                                <div class="hcard-price-row">
+                                    <span class="hcard-price">
+                                        $@hotel.NightPrice.ToString("0.00")
+                                    </span>
+                                    <span class="hcard-per">/ night</span>
+                                </div>
+                            </div>
+
+                        </a>
+                    }
+                </div>
+            }
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-wrap">
+            <div class="footer-brand">
+                <a href="/" class="brand">
+                    <svg class="brand-mark" width="16" height="16" viewBox="0 0 24 24">
+                        <path d="M12 2 L15.5 8.5 L23 9.5 L17.5 15 L19 22 L12 18.5 L5 22 L6.5 15 L1 9.5 L8.5 8.5 Z" fill="none" stroke="#c8a96e" stroke-width="1.4" />
+                        <circle cx="12" cy="12" r="3" fill="#c8a96e" opacity="0.7" />
+                    </svg>
+                    <span class="brand-name">Aurevia</span>
+                </a>
+                <p class="footer-tagline">Curated Luxury Stays, Worldwide.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2025 Aurevia Collection. Powered by Booking.com.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

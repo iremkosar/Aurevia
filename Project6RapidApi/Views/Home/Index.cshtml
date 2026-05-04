@@ -1,0 +1,325 @@
+﻿@model Project6RapidApi.ViewModels.IndexVm
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurevia — Curated Luxury Stays</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="nav scrolled" id="nav">
+        <div class="nav-wrap">
+            <a href="/" class="brand">
+                <svg class="brand-mark" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M12 2 L15.5 8.5 L23 9.5 L17.5 15 L19 22 L12 18.5 L5 22 L6.5 15 L1 9.5 L8.5 8.5 Z" fill="none" stroke="#c8a96e" stroke-width="1.4" />
+                    <circle cx="12" cy="12" r="3" fill="#c8a96e" opacity="0.7" />
+                </svg>
+                <span class="brand-name">Aurevia</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#">Stays</a></li>
+                <li><a href="#">Experiences</a></li>
+                <li><a href="#">Members</a></li>
+            </ul>
+            <div class="nav-end">
+                <a href="#" class="nav-cta">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-media">
+            <img class="hero-img"
+                 src="https://images.unsplash.com/photo-1615880484746-a134be9a6ecf?w=1920&q=90&auto=format&fit=crop"
+                 alt="Luxury Hotel" />
+            <div class="hero-vignette"></div>
+        </div>
+        <div class="hero-body">
+            <p class="hero-kicker">Curated for the discerning traveller</p>
+            <h1 class="hero-heading">
+                <span class="heading-white">Where Will You</span>
+                <span class="heading-gold">Stay Next?</span>
+            </h1>
+
+            <!-- SEARCH FORM -->
+            <div class="search-glass">
+                <form asp-action="Results" asp-controller="Home" method="get">
+                    <div class="search-row">
+
+                        <div class="sf sf-dest">
+                            <label class="sf-label">Destination</label>
+                            <div class="sf-input-row">
+                                <svg class="sf-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <input type="text" name="city" placeholder="Paris, Bali, Maldives…" required />
+                            </div>
+                        </div>
+
+                        <div class="sf-sep"></div>
+
+                        <div class="sf">
+                            <label class="sf-label">Check-in</label>
+                            <div class="sf-input-row">
+                                <input type="date" name="checkin" required />
+                            </div>
+                        </div>
+
+                        <div class="sf-sep"></div>
+
+                        <div class="sf">
+                            <label class="sf-label">Check-out</label>
+                            <div class="sf-input-row">
+                                <input type="date" name="checkout" required />
+                            </div>
+                        </div>
+
+                        <div class="sf-sep"></div>
+
+                        <div class="sf sf-narrow">
+                            <label class="sf-label">Adults</label>
+                            <div class="sf-input-row">
+                                <input type="number" name="adults" value="2" min="1" max="8" />
+                            </div>
+                        </div>
+
+                        <div class="sf-sep"></div>
+
+                        <div class="sf sf-narrow">
+                            <label class="sf-label">Children</label>
+                            <div class="sf-input-row">
+                                <input type="number" name="children" value="0" min="0" max="6" />
+                            </div>
+                        </div>
+
+                        <div class="sf-sep"></div>
+
+                        <div class="sf sf-narrow">
+                            <label class="sf-label">Rooms</label>
+                            <div class="sf-input-row">
+                                <input type="number" name="rooms" value="1" min="1" max="5" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="search-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                        Search Hotels
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- WIDGETS -->
+    <section class="market-section">
+        <div class="market-inner">
+            <div class="market-head">
+                <p class="market-eyebrow">Live Financial & Local Insights</p>
+                <h2 class="market-title">Global <em>Pulse</em></h2>
+                <p class="market-desc">Real-time data to plan your journey</p>
+            </div>
+            <div class="market-grid">
+
+                <!-- DÖVIZ -->
+                <div class="market-card">
+                    <div class="mc-top">
+                        <div class="mc-icon mc-icon-gold">₺</div>
+                        <div>
+                            <h3>Exchange Rates</h3>
+                            <p>Turkish Lira Base</p>
+                        </div>
+                        <span class="live-tag">● LIVE</span>
+                    </div>
+                    @foreach (var rate in Model.ExchangeRates)
+                    {
+                        <div class="fx-row">
+                            <div class="fx-left">
+                                <div class="fx-abbr">@rate.Key</div>
+                                <div class="fx-code">@rate.Key</div>
+                            </div>
+                            <div class="fx-rate">₺@rate.Value</div>
+                        </div>
+                    }
+                </div>
+
+                <!-- YAKIT -->
+                <div class="market-card">
+                    <div class="mc-top">
+                        <div class="mc-icon mc-icon-green">⛽</div>
+                        <div>
+                            <h3>Fuel Prices</h3>
+                            <p>Turkey — ₺ per litre</p>
+                        </div>
+                        <span class="live-tag">● LIVE</span>
+                    </div>
+                    <div class="fuel-row">
+                        <div class="fuel-top">
+                            <div>
+                                <div class="fuel-name">Gasoline</div>
+                            </div>
+                            <div class="fuel-price">@Model.GasPrice.gasoline</div>
+                        </div>
+                        <div class="fuel-bar">
+                            <div class="fuel-fill" style="width:84%"></div>
+                        </div>
+                    </div>
+                    <div class="fuel-row">
+                        <div class="fuel-top">
+                            <div>
+                                <div class="fuel-name">Diesel</div>
+                            </div>
+                            <div class="fuel-price">@Model.GasPrice.diesel</div>
+                        </div>
+                        <div class="fuel-bar">
+                            <div class="fuel-fill" style="width:77%"></div>
+                        </div>
+                    </div>
+                    <div class="fuel-row">
+                        <div class="fuel-top">
+                            <div>
+                                <div class="fuel-name">LPG</div>
+                            </div>
+                            <div class="fuel-price">@Model.GasPrice.lpg</div>
+                        </div>
+                        <div class="fuel-bar">
+                            <div class="fuel-fill" style="width:38%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KRİPTO -->
+                <div class="market-card">
+                    <div class="mc-top">
+                        <div class="mc-icon mc-icon-blue">₿</div>
+                        <div>
+                            <h3>Crypto Markets</h3>
+                            <p>USD Prices</p>
+                        </div>
+                        <span class="live-tag">● LIVE</span>
+                    </div>
+                    <div class="crypto-row">
+                        <div class="crypto-left">
+                            <div class="crypto-ico c-btc">₿</div>
+                            <div>
+                                <div class="crypto-name">Bitcoin</div>
+                                <div class="crypto-sym">BTC</div>
+                            </div>
+                        </div>
+                        <div class="crypto-right">
+                            <div class="crypto-price">$@Model.CryptoPrices.bitcoin.usd</div>
+                        </div>
+                    </div>
+                    <div class="crypto-row">
+                        <div class="crypto-left">
+                            <div class="crypto-ico c-eth">Ξ</div>
+                            <div>
+                                <div class="crypto-name">Ethereum</div>
+                                <div class="crypto-sym">ETH</div>
+                            </div>
+                        </div>
+                        <div class="crypto-right">
+                            <div class="crypto-price">$@Model.CryptoPrices.ethereum.usd</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HAVA DURUMU -->
+                <div class="market-card">
+                    <div class="mc-top">
+                        <div class="mc-icon mc-icon-sky">🌤</div>
+                        <div>
+                            <h3>@Model.Weather.name</h3>
+                            <p>Weather Forecast</p>
+                        </div>
+                        <span class="live-tag">● LIVE</span>
+                    </div>
+                    <div class="wx-city">@Model.Weather.name</div>
+                    <div class="wx-country">@Model.Weather.sys.country</div>
+                    <div class="wx-main">
+                        <span class="wx-emoji">
+                            @{
+                                var weatherMain = Model.Weather.weather.FirstOrDefault()?.main ?? "";
+                                var emoji = weatherMain switch
+                                {
+                                    "Clear" => "☀️",
+                                    "Clouds" => "☁️",
+                                    "Rain" => "🌧",
+                                    "Snow" => "❄️",
+                                    "Thunderstorm" => "⛈",
+                                    "Drizzle" => "🌦",
+                                    "Mist" => "🌫",
+                                    _ => "🌤"
+                                };
+                            }
+                            @emoji
+                        </span>
+                        <span class="wx-temp">
+                            @Math.Round((Model.Weather.main.temp - 32) * 5 / 9, 1)°
+                            <sup style="font-size:1.5rem">C</sup>
+                        </span>
+                    </div>
+                    <div class="wx-cond">
+                        @Model.Weather.weather.FirstOrDefault()?.description
+                    </div>
+                    <div class="wx-stats">
+                        <div class="wx-stat">
+                            <div class="wx-stat-ico">💧</div>
+                            <div class="wx-stat-val">@Model.Weather.main.humidity%</div>
+                            <div class="wx-stat-lbl">Humidity</div>
+                        </div>
+                        <div class="wx-stat">
+                            <div class="wx-stat-ico">💨</div>
+                            <div class="wx-stat-val">@Model.Weather.wind.speed km/h</div>
+                            <div class="wx-stat-lbl">Wind</div>
+                        </div>
+                        <div class="wx-stat">
+                            <div class="wx-stat-ico">🌡</div>
+                            <div class="wx-stat-val">@Math.Round((Model.Weather.main.feels_like - 32) * 5 / 9, 1)°</div>
+                            <div class="wx-stat-lbl">Feels Like</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-wrap">
+            <div class="footer-brand">
+                <a href="/" class="brand">
+                    <svg class="brand-mark" width="16" height="16" viewBox="0 0 24 24">
+                        <path d="M12 2 L15.5 8.5 L23 9.5 L17.5 15 L19 22 L12 18.5 L5 22 L6.5 15 L1 9.5 L8.5 8.5 Z" fill="none" stroke="#c8a96e" stroke-width="1.4" />
+                        <circle cx="12" cy="12" r="3" fill="#c8a96e" opacity="0.7" />
+                    </svg>
+                    <span class="brand-name">Aurevia</span>
+                </a>
+                <p class="footer-tagline">Curated Luxury Stays, Worldwide.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2025 Aurevia Collection. Powered by Booking.com.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
