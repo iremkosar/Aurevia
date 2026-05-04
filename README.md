@@ -1,5 +1,5 @@
 🌍 Aurevia
-Aurevia, gerçek zamanlı API verileriyle çalışan, otel arama ve detay görüntüleme odaklı bir seyahat platformudur. ASP.NET Core MVC mimarisi üzerine inşa edilmiştir.
+Gerçek zamanlı API verileriyle çalışan, otel arama ve detay görüntüleme odaklı bir seyahat platformudur. ASP.NET Core MVC mimarisi üzerine inşa edilmiştir.
 
 📋 Proje Hakkında
 Aurevia, farklı kaynaklardan güncel verileri tek bir platformda sunmayı hedefleyen bir ASP.NET Core web uygulamasıdır. 
